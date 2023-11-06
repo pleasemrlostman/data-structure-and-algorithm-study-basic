@@ -1,0 +1,32 @@
+{
+  "name": "data-structure-and-algorithm-study-basic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/issues"
+  },
+  "homepage": "https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic#readme",
+  "devDependencies": {
+    "commitizen": "^4.3.0",
+    "cz-customizable": "^7.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "cz-config.cjs"
+    }
+  }
+}
