@@ -27,6 +27,11 @@ class LinkedList {
     console.log(text);
   }
 
+  clear() {
+    this.head = null;
+    this.count = 0;
+  }
+
   insertAt(index, data) {
     if (index > this.count || index < 0) {
       throw new Error("범위를 넘어갔습니다.");
@@ -40,12 +45,74 @@ class LinkedList {
       let currentNode = this.head;
       for (let i = 0; i < index - 1; i++) {
         currentNode = currentNode.next;
-        console.log("hello", currentNode);
       }
       newNode.next = currentNode.next;
       currentNode.next = newNode;
     }
     this.count++;
+  }
+
+  insertLast(data) {
+    this.insertAt(this.count, data);
+    // let newNode = new Node(data);
+    // let currentNode = this.head;
+    // while (currentNode.next !== null) {
+    //   currentNode = currentNode.next;
+    // }
+    // currentNode.next = newNode;
+  }
+
+  deleteAt(index) {
+    if (index >= this.count || index < 0) {
+      throw new Error("제거할 수 없습니다.");
+    }
+
+    let currentNode = this.head;
+    if (index == 0) {
+      let deletedNode = this.head;
+      this.head = this.head.next;
+      this.count--;
+      return deletedNode;
+    } else {
+      // 처음 생각 했던 식
+      // let deletedNode;
+      //   for (let i = 0; i < index - 1; i++) {
+      //     currentNode = currentNode.next;
+      //     deletedNode = currentNode.next;
+      //     currentNode.next = deletedNode.next;
+      //     this.count--;
+      //     return deletedNode;
+      //   }
+      //   deletedNode = currentNode.next;
+      //   currentNode.next = deletedNode.next;
+      //   return deletedNode;
+      // }
+
+      for (let i = 0; i < index - 1; i++) {
+        currentNode = currentNode.next;
+      }
+      let deletedNode = currentNode.next;
+      // currentNode.next = deletedNode.next;
+      currentNode.next = currentNode.next.next;
+      this.count--;
+      return deletedNode;
+    }
+  }
+  deleteLast() {
+    console.log("what?", this.count);
+    return this.deleteAt(this.count - 1);
+  }
+
+  getNodeAt(index) {
+    if (index >= this.count || index < 0) {
+      throw new Error("범위를  넘어갔습니다.");
+    }
+
+    let currentNode = this.head;
+    for (let i = 0; i < index; i++) {
+      currentNode = currentNode.next;
+    }
+    return currentNode;
   }
 }
 
