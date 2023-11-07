@@ -23,6 +23,8 @@ class LinkedList {
     }
 
     text += "]";
+
+    console.log(text);
   }
 
   insertAt(index, data) {

@@ -86,6 +86,7 @@ class LinkedList {
 export { Node, LinkedList };
 
 ```
+## 삽입 - insertAt(index, data)
 
 가장먼저 `LinkedList` 클래스를 생성해준다. 해당 클래스에서 나온 객체를 통해 연결 리스트를 만들 수 있다.<br>
 우선 연결리스트의 `head` 프로퍼티 즉 첫번째 `Node`값을 `null`으로 초기화 시켜주고 해당 연결리스트의 갯수룰 `count`라는 프로퍼티로 제작 후 0개로 세팅했다.<br><br>
@@ -193,3 +194,24 @@ else {
 그리고 index 값이 2이므로 for문에 들어오고 cunnretNode는 currentNode의 next 즉 `{value:1,next:null}` 노드로 할당된다<br>
 그리고 i가 1이되므로 for문을 나와서 newNode의 next값을 currnetNode의 next 즉 null값을 할당해주고 currnetNode의 next값 즉 원래 null이였던 값을 newNode 즉
 `{value: 2, next: null}` 값으로 할당해준다. 이렇게 연결리스트의 삽입이 완성됐다.
+
+## 보여주기 - printAll()
+
+`printAll()` 메서드는 삽입 메서드를 이해했으면 어렵지 않다. <br>
+```js
+list.insertAt(0, 0);
+list.insertAt(1, 1);
+list.insertAt(2, 2);
+```
+
+위의 코드처럼 연결리스트를 생성했다고 하자<br>
+
+현재의 `currnetNode` 는 `this.head` 즉 `{data:0, next:{data:1,next:{data:2,next:null}}}` 이다.<br>
+
+처음의 `text`는 `[` 이고 `while` 반복문을 돈다 `currentNode` 가 `null`이 아니므로  `text+=` 하여 `currentNode.data` 즉 `1` 그러므로 `[1` 이된다.<br>
+
+그리고 `currentNode`는 현재 `currentNode`의 `next`값이 되니까 `{data:1,next:{data:2,next:null}}` 이되어 `currentNode !== null` 조간에 만족하므로 `text`는 `[1,`가 된다.<br>
+
+ 그리고 다시 `while`문으로 돌아오면 `currnetNode`는 여전히 `{data:1,next:{data:2,next:null}}` 이기 때문에 `text`는 `2`가 더해져서 `[1,2` 가 되고 `currentNode`는 `{data:2,next:null}`로 변하게 된다.<br>
+ 
+ `null` 이 아니기 때문에 `,`  가 더해져서 `[1,2,`가되고 다시 `while`문을 한번 더 돌아서 `value`가 더해져 `[1,2,3` 이고 되고 currentNode가 null 이 됐기 때문에 `while`문을 나와 `]` 더해져서 `[1,2,3]` 이 됐다.
