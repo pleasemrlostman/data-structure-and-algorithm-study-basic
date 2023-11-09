@@ -89,6 +89,8 @@ class LinkedList {
 export { Node, LinkedList };
 ```
 
+---
+
 ## insertAt(index, data)
 
 가장먼저 `LinkedList` 클래스를 생성해준다. 해당 클래스에서 나온 객체를 통해 연결 리스트를 만들 수 있다.<br>
@@ -208,6 +210,8 @@ else {
 그리고 i가 1이되므로 for문을 나와서 newNode의 next값을 currnetNode의 next 즉 null값을 할당해주고 currnetNode의 next값 즉 원래 null이였던 값을 newNode 즉
 `{value: 2, next: null}` 값으로 할당해준다. 이렇게 연결리스트의 삽입이 완성됐다.
 
+---
+
 ## printAll()
 
 `printAll()` 메서드는 삽입 메서드를 이해했으면 어렵지 않다. <br>
@@ -229,3 +233,132 @@ list.insertAt(2, 2);
 그리고 다시 `while`문으로 돌아오면 `currnetNode`는 여전히 `{data:1,next:{data:2,next:null}}` 이기 때문에 `text`는 `2`가 더해져서 `[1,2` 가 되고 `currentNode`는 `{data:2,next:null}`로 변하게 된다.<br>
 
 `null` 이 아니기 때문에 `,` 가 더해져서 `[1,2,`가되고 다시 `while`문을 한번 더 돌아서 `value`가 더해져 `[1,2,3` 이고 되고 currentNode가 null 이 됐기 때문에 `while`문을 나와 `]` 더해져서 `[1,2,3]` 이 됐다.
+
+---
+
+## insertLast()
+
+연결리스트 마지막에 `Node`를 추가하는 메서드이다, 처음에 내가 생각했던 로직은 head에서 부터 `next`가 `null`이 될 때 까지 반복을하고 연결리스트 마지막
+노드에 `next`값을 새로 추가된 `Node`로 변경해주고 추가된 `Node`에 `next`를 `null`로 변경해주는 로직을 생각했다.
+
+```js
+let newNode = new Node(data);
+let currentNode = this.head;
+while (currentNode.next !== null) {
+  currentNode = currentNode.next;
+}
+currentNode.next = newNode;
+```
+
+위의 로직이 구현했던 로직이다, 물론 해당 로직이 틀린건 아니지만 더 간단히 구현하는 방법이 있다. 그건 바로 `insertAt()` 메서드를 재활용하는것이다.
+
+```js
+insertLast(data) {
+  this.insertAt(this.count, data);
+}
+```
+
+해당 로직 처럼 구현하면 자동으로 반복문을 돌아 마지막에 새로운 노드가 추가된다.
+
+---
+
+## deleteAt()
+
+특정한 `index`의 `Node`를 삭제하는 방법이다.<br><br>
+
+지우는건 가장 첫 `Node`를 지우는 케이스와 그 외의 케이스를 나누어서 작성해야한다.<br>
+우선 가장 첫 번째 `Node`를 지우는 방법을 코드를 먼저 봐보자<br>
+
+```js
+if (index >= this.count || index < 0) {
+  throw new Error("제거할 수 없습니다.");
+}
+
+let currentNode = this.head;
+if (index == 0) {
+  let deletedNode = this.head;
+  this.head = this.head.next;
+  this.count--;
+  return deletedNode;
+}
+```
+
+count보다 큰 영역과 0보다 작으면 삭제할 수 없으므로 우선 에러를 발생시켜주고<br>
+현재 head값 즉 0번쨰 `Node`를 `currnetNode`로 설정해주고 `head`값 즉 가장 첫 `Node`를 삭제시켜줄 예정으로 해당 값을 `deletedNode` 변수에 할당해준다
+그리고 `head` 값을 지금 `head` 값의 `next`로 수정해주고 `count` 값을 `-1`해주고 `deletedNode`값을 리턴해주면 완료<br><br>
+
+두 번째로 `index`가 `0`이 아닌 경우를 살펴보자
+
+해당 방법은 삭제하고 싶은 `Node` 직전까지 반복문을 돌고<br>
+그 노드의 `next` 값을 삭제하고 싶은 `Node`의 `next` 값으로 변경해준다 (삭제하고싶은 `Node`의 다음 다음 값으로 수정해줘도 된다.)<br>
+그리고 `count`값을 -1하고 삭제하고 싶은 `Node`를 `return` 해주면 된다.<br>
+해당 코드는 처음 작성했던 코드 (잘못 작성 한 코드)와 정상적인 코드를 함께 보도록 하자.
+
+```js
+let deletedNode;
+for (let i = 0; i < index - 1; i++) {
+  currentNode = currentNode.next;
+  deletedNode = currentNode.next;
+  currentNode.next = deletedNode.next;
+  this.count--;
+  return deletedNode;
+}
+deletedNode = currentNode.next;
+currentNode.next = deletedNode.next;
+return deletedNode;
+```
+
+처음 생각한 코드는 반복문 안에서 나머지 로직을 수행해주고 있었다.<br>이러면 내가 제거하고싶은 값을 제거하고 한번 더 반복문이 실행되서 원하지 않는 값까지 제거 되는 문제가 생긴다.<br><br>가령 나는 `index`가 `3`인 `Node`를 지우고 싶다면 반복문을 `index - 1` 까지 돌아서 삭제하고 싶은 이전 `Node` 까지만 오고 로직을 실행시켜주면 되는데 해당 기능에선 예를들어 `count--` 로직이 두번이나 실행되게 된다.<br><br>
+
+이러한 문제점을 수정한 코드는 아래를 살펴보자
+
+```js
+ for (let i = 0; i < index - 1; i++) {
+        currentNode = currentNode.next;
+      }
+      let deletedNode = currentNode.next;
+      // currentNode.next = deletedNode.next;
+      currentNode.next = currentNode.next.next;
+      this.count--;
+      return delete
+```
+
+만약 현재 `4`개의 `Node`가 있고 `3`번째 노드를 삭제해주고 싶다면 `deleteAt(index)` 메서드 인자에 `2` (`count`는 갯수 `index`값과 구분하자) 을 넣어준다 그러면<br>
+`index`는 `count` 보다 작고 (`count` 값은 4이다) `0`보다 크다 <br>
+그리고 `0`이 아니기 때문에 위의 로직으로 들어온다 `index - 1`이기 때문에 반복문은 `i`가 `0`일 때 `1`일 때 총 `1`번 돈다 그러면 <br>
+`currentNode`는 `1`번째 `index`로 변경된다. `currentNode` `next` 값을 `deletedNode` 변수에 할당한다<br>
+그리고 `currentNode` 값의 `next`를 <br> `deleteNode`의 `next`값으로 변경하고 (혹은 `currentNode` 의 `next.next` 값으로 변경)<br>
+`deletedNode`값을 `return` 하고 `count`를 `-1`해주면 된다.
+
+---
+
+## deleteLast()
+
+마지막 노드를 제거하는것도 기존의 메서드를 재활용해서 제거가능하다 만약 총 갯수가 4개라면 내가 제거하고싶은 `Node`의 `index` 값은 3이다. 그러므로 `count` 값 보다 `-1` 한 값이 인자로 들어가면 된다. 코드는 아래와 같다.
+
+```js
+  deleteLast() {
+    console.log("what?", this.count);
+    return this.deleteAt(this.count - 1);
+  }
+```
+
+---
+
+## getNodeAt()
+
+특정 Node를 리턴하는 함수다 이도 어렵지 않게 `head`에서 원하는 `index`를 받아 반복시켜 `currentNode`값을 변경시켜주고 해당 값을 `return` 해주면 된다 코드는 아래와 같다.
+
+```js
+  getNodeAt(index) {
+    if (index >= this.count || index < 0) {
+      throw new Error("범위를  넘어갔습니다.");
+    }
+
+    let currentNode = this.head;
+    for (let i = 0; i < index; i++) {
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
+```
