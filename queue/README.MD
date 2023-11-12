@@ -162,7 +162,7 @@ deleteAt(index) {
 그리고 마지막 요소의 이전값의 다음값을 `null`로 수정해주고 `this.tail.prev.next = null` `this.tail`은 현재 마지막 요소의 이전값으로 변경해준다 (`this.tail = this.tail.prev`) 그리고 `count`를 `-1` 해주고 `deletedNode`를 리턴해준다
 
 ```js
-deleteAt(index) {
+  deleteAt(index) {
     if (index >= this.count || index < 0) {
       throw new Error("제거할 수 없습니다.");
     }
@@ -180,3 +180,73 @@ deleteAt(index) {
 ```
 
 마지막으로 중간의 요소를 제거해주는 경우도 수정해줘야 한다. 수정해줄 `index` 이전값으로 `currentNode`를 옮겨주고 `deletedNode`는 `currentNode`의 `next`값으로 할당 해준다. 그리고 그리고 `currentNode`의 `next`는 `currentNode`의 `next`의 `next` 값으로 할당해주고 변경된 `currentNode`의 `next`의 `prev` 값은 `currentNode`로 수정해준다. 그리고 `count`값을 `-1`해주고 `deletedNode`를 `return` 해준다
+
+```js
+  deleteAt(index) {
+    if (index >= this.count || index < 0) {
+      throw new Error("제거할 수 없습니다.");
+    }
+
+    let currentNode = this.head;
+    else {
+      for (let i = 0; i < index - 1; i++) {
+        currentNode = currentNode.next;
+      }
+      let deletedNode = currentNode.next;
+      currentNode.next = currentNode.next.next;
+      currentNode.next.prev = currentNode;
+      this.count--;
+      return deletedNode;
+    }
+  }
+
+```
+
+## Queue 클래스 구현
+
+이중 연결리스트를 구현했으니 이제 진짜 `Queue` 클래스를 구현하도록 하자 먼저 코드는 아래와 같다.
+
+```js
+class Queue {
+  constructor() {
+    this.list = new DoublyLinkedList();
+  }
+
+  enqueue(data) {
+    this.list.insertAt(0, data);
+  }
+  dequeue() {
+    try {
+      return this.list.deleteLast();
+    } catch (e) {
+      return null;
+    }
+  }
+  front() {
+    return this.list.tail;
+  }
+  isEmpty() {
+    return this.list.count == 0;
+  }
+}
+
+export { Queue };
+```
+
+우선 `Queue` `class` `list` 프로퍼티 값에 이중연결리스트 클래스의 인스턴스 값을 추가해준다.<br><br>
+
+### enqueue()
+
+`queue` 자료구조에 데이터를 추가하는걸 `enqueue`라고 한다 추가되는 데이터는 항상 `index`가 `0`이므로 enqueue 메서드는 이중연결리스트의 `insertAt` 메서드를 이용해 항상 `0`번째 `index`에 데이터를 추가해준다.<br><br>
+
+### dequeue()
+
+`queue` 자료구조에서 데이터를 제거하는걸 `dequeue`라고 한다 `queue`자료구조는 항상 맨 마지막 요소를 삭제하므로 (즉 가장 처음에 들어온 데이터를 제거) 연결리스트으의 `deleteLast` 메서드를 제거한다. `tail` 값을 이용해서 데이터를 제거하기 때문에 `O(1)`의 성능을 가진다. 그리고 오류가 발생할 경우 에러를 리턴해주므로 `try/catch`문을 이용해서 `null`을 `return`해준다.<br><br>
+
+### front()
+
+`front` 메서드는 나갈 요소를 기준으로 가장 앞에있는 요소 즉 가장 뒤에있는 `tail`값을 리턴해주면 된다.<br><br>
+
+### isEmpty()
+
+`isEmpty` 메서드는 해당 연결리스트의 `count`값을통해 확인할 수 있다.
