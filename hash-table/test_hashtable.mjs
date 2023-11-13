@@ -12,6 +12,9 @@ hashTable.set(10, "이영표");
 hashTable.set(8, "최태욱");
 hashTable.set(9, "설기현");
 hashTable.set(14, "이천수");
+hashTable.set(31, "테스트");
+
+console.log("hashTable", hashTable);
 
 console.log(`1: ${hashTable.get(1)}`);
 hashTable.remove(1);
