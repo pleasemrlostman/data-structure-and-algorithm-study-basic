@@ -254,3 +254,164 @@ function power(x, n) {
 
 console.log(power(2, 5));
 ```
+
+---
+
+### 하노이의 탑
+
+```js
+
+function hanoi(count, from, to, temp) {
+  if(count == 0) return
+  hanoi(count - 1, from, temp, to)   
+  console.log(`원반, ${count}을 ${from}에서 ${to}로 이동`)
+  hanoi(count - 1, temp, to, from) 
+}
+
+hanoi(3, "A", "C", "B")
+```
+
+3개의 기둥을 기둥 `A`에서 시작해서 `C`로 옮기는데 `B`도 사용된다는 의미이다.
+
+자 이제 인자를 대입해가면서 직접 어떤식으로 작동하는지 확인해 보도록하자 우선 `hanoi(3, "A", "C", "B")` 코드를 넣어보자
+
+
+```js
+function hanoi(3, "A", "C", "B") {
+  if(3 == 0) return
+  hanoi(3 - 1, "A", "B", "C")   
+  console.log(`원반, ${3}을 ${A}에서 ${C}로 이동`)
+  hanoi(3 - 1, "B", "C", "A") 
+}
+```
+자 이렇게 코드가 실행된다 그러면 한 줄 한 줄 읽어보면 `if(3 == 0) return` 해당 if절은 `false` 이므로 `hanoi(2, "A", "B", "C")` 코드로 이동한다. 그러면
+
+```js
+function hanoi(2, "A", "B", "C") {
+  if(2 == 0) return
+  hanoi(2 - 1, "A", "C", "B")   
+  console.log(`원반, ${2}을 ${A}에서 ${B}로 이동`)
+  hanoi(2 - 1, "C", "B", "A") 
+}
+```
+함수가 실행된다 자 그런데 `if(2 == 0) return` 도 `false`이기 때문에 `hanoi(2 - 1, "A", "C", "B")` 해당 함수로 이동한다 그러면
+
+
+```js
+function hanoi(1, "A", "C", "B") {
+  if(1 == 0) return
+  hanoi(1 - 1, "A", "B", "C")   
+  console.log(`원반, ${1}을 ${A}에서 ${C}로 이동`)
+  hanoi(1 - 1, "B", "C", "A") 
+}
+```
+함수가 실행된다 자 그런데 `if(1 == 0) return` 도 `false`이기 때문에 `hanoi(1 - 1, "A", "C", "B")` 해당 함수로 이동한다<br>
+여기서! 특이점이 발생한다. `hanoi(1 - 1, "A", "B", "C")` 을 실행시키면 함수 내부에서 `if(0 == 0)`이 `true`이기 때문에 바로 그 다음 함수가 실행된다 그러면 `console.log(원반, 1을 A에서 C로 이동)` 이 콘솔에 찍히고 `hanoi(1 - 1, "B", "C", "A")` 해당 함수가 시작되지만 바로 return되기 때문에
+
+```js
+function hanoi(2, "A", "B", "C") {
+  if(2 == 0) return
+  hanoi(2 - 1, "A", "C", "B")   
+  console.log(`원반, ${2}을 ${A}에서 ${B}로 이동`)
+  hanoi(2 - 1, "C", "B", "A") 
+}
+```
+함수로 복귀한다 그러면 `hanoi(2 - 1, "A", "C", "B")` 는 완료했으니 `console.log(원반, 2을 A에서 B로 이동)` 가 콘솔에 찍힌다.
+
+그리고 `hanoi(2 - 1, "C", "B", "A")` 함수가 실행되므로
+
+```js
+function hanoi(1, "C", "B", "A") {
+  if(1 == 0) return
+  hanoi(1 - 1, "C", "A", "B")   
+  console.log(`원반, ${1}을 ${C}에서 ${B}로 이동`)
+  hanoi(1 - 1, "A", "B", "C") 
+}
+```
+if문은 `false` 이므로 아래로 내려갔지만 바로 return되니 함수를 빠져나와서 `console.log(원반, 1을 C에서 B로 이동)`가 콘솔에 찍힌다.
+
+그리고 아래 함수가 시작되는데 return되니 함수를 빠져나와서 원래 호출했던 함수로 돌아온다
+
+```js
+function hanoi(2, "A", "B", "C") {
+  if(2 == 0) return
+  hanoi(2 - 1, "A", "C", "B")   
+  console.log(`원반, ${2}을 ${A}에서 ${B}로 이동`)
+  hanoi(2 - 1, "C", "B", "A") 
+}
+```
+그런데 해당 함수도 완료됐으니 또 해당 함수를 불렀던 함수로 복귀하면
+```js
+function hanoi(3, "A", "C", "B") {
+  if(3 == 0) return
+  hanoi(3 - 1, "A", "B", "C")   
+  console.log(`원반, ${3}을 ${A}에서 ${C}로 이동`)
+  hanoi(3 - 1, "B", "C", "A") 
+}
+```
+`hanoi(3 - 1, "A", "B", "C")` 해당 함수가 호출됐으니 `console.log(원반, 3을 A에서 C로 이동)` 이 콘솔에 찍힌다. 
+
+그리고 `hanoi(3 - 1, "B", "C", "A")` 함수가 호출되면
+
+```js
+function hanoi(2, "B", "C", "A") {
+  if(2 == 0) return
+  hanoi(2 - 1, "B", "A", "C")   
+  console.log(`원반, ${2}을 ${B}에서 ${C}로 이동`)
+  hanoi(2 - 1, "A", "C", "B") 
+}
+```
+함수가 호출된다 if문을 빠져나와 `hanoi(2 - 1, "B", "A", "C")`함수가 실행되면
+
+```js
+function hanoi(1, "B", "A", "C") {
+  if(1 == 0) return
+  hanoi(1 - 1, "B", "C", "A")   
+  console.log(`원반, ${1}을 ${B}에서 ${A}로 이동`)
+  hanoi(1 - 1, "C", "A", "B") 
+}
+```
+
+if문을 빠져나와 아래 함수로 이동해도 바로 return되니 `console.log(원반, 1을 B에서 A로 이동)` 해당 부분이 콘솔에 찍힌다.
+그리고 아래 함수는 바로 return 되므로 원래 함수로 돌아오면
+```js
+function hanoi(2, "B", "C", "A") {
+  if(2 == 0) return
+  hanoi(2 - 1, "B", "A", "C")   
+  console.log(`원반, ${2}을 ${B}에서 ${C}로 이동`)
+  hanoi(2 - 1, "A", "C", "B") 
+}
+```
+`hanoi(2 - 1, "B", "A", "C")` 함수는 실행 했으므로 `console.log(원반, 2을 B에서 C로 이동)` 가 콘솔에 찍힌다 그리고 `hanoi(2 - 1, "A", "C", "B")` 함수가 실행되면
+
+```js
+function hanoi(1, "A", "C", "B") {
+  if(1 == 0) return
+  hanoi(1 - 1, "A", "B", "C")   
+  console.log(`원반, ${1}을 ${A}에서 ${C}로 이동`)
+  hanoi(1 - 1, "B", "C", "A") 
+}
+```
+해당 함수가 실행되므로 return을 통과하고 다음 함수도 바로 return되므로 통과하고 `console.log(원반, 1을 A에서 C로 이동)`이 콘솔에 찍히고 다음 함수가 실행되지만 리턴되므로 원래 해당함수로 돌아가자
+
+```js
+function hanoi(2, "B", "C", "A") {
+  if(2 == 0) return
+  hanoi(2 - 1, "B", "A", "C")   
+  console.log(`원반, ${2}을 ${B}에서 ${C}로 이동`)
+  hanoi(2 - 1, "A", "C", "B") 
+}
+```
+그런데 해당함수도 종료됐으니까 원래함수로 돌아가면
+
+```js
+function hanoi(3, "A", "C", "B") {
+  if(3 == 0) return
+  hanoi(3 - 1, "A", "B", "C")   
+  console.log(`원반, ${3}을 ${A}에서 ${C}로 이동`)
+  hanoi(3 - 1, "B", "C", "A") 
+}
+```
+해당 함수인데 해당함수도 종료됐으니 `hanoi(3, "A", "C", "B")` 해당 함수가 끝났다.
+
+
