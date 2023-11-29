@@ -27,3 +27,55 @@
 퀵 정렬은 이렇게 한 번 진행될 떄마다 피벗이 정렬되고 정렬된 배열을 좌우로 나눠서 같은 방식으로 재귀호출 해 모든 배열을 정렬합니다.
 
 ## 구현
+
+```js
+function quickSort(arr, left, right) {
+    if(left <= right) {
+        let pivot = divide(arr, left, right); // 정렬된 피벗의 위치를 리턴 값이 아니라 위치의 index다
+        quickSort(arr, left, pivot - 1)
+        quickSort(arr, pivot + 1, right)
+    }
+}
+
+function divide(arr, left, right) {
+    let pivot = arr[left];
+    let leftStartIndex = left + 1;
+    let rightStartIndex = right;
+    while (leftStartIndex <= rightStartIndex) {
+        while(leftStartIndex <= right && pivot >= arr[leftStartIndex]) {
+            leftStartIndex++
+        }
+        while (rightStartIndex >= (left + 1) && pivot <= arr[rightStartIndex]) {
+            rightStartIndex--
+        }
+
+        if(leftStartIndex <= rightStartIndex) {
+            swap(arr, leftStartIndex, rightStartIndex);
+        }
+    }
+
+    swap(arr, left, rightStartIndex);
+    return rightStartIndex;
+}
+
+function swap(arr, index1, index2) {
+    let temp = arr[index1]
+    arr[index1] = arr[index2]
+    arr[index2] = temp;
+}
+```
+
+## 성능
+
+퀵 정렬은 피벗을 기준으로 배열을 반으로 나눕니다. 즉 데이터가 한 개가 될 때까지 반으로 나누므로 `logn` 성능<br>
+그리고 이렇게 나뉘어진 배열을 원소 수 n만큼 진행해야 하니 n을 곱해서 `nlongn`입니다.<br>
+피벗이 매번 배열을 반으로 가르는 경우는 `θ(nlogn)`<br>
+하지만 이 성능은 평균적인 경우를 나타냅니다. 최악의 경우는 피벗이 중간이 아닌 한쪽으로 치우친 경우로 `O(n^2)`의 성능 보일 수도 있다.<br>그래서 최악의 경우를 표현하자면 `O(n^2)`이다.<br>
+하지만 퀵 정렬은 대부분의 경우 좋은 피벗을 선택하고 최악의 경우가 발생할 확률이 극히 낮아서 평균적인 성능을 말합니다.<br>
+따라서 퀵 정렬은 `θ(nlogn)`의 성능을 가진다.<br>
+성능만 보면 병합 정렬이 더 좋다고 볼 수 있는데 실제로 병합 정렬과 비교하면 퀵 정렬이 더 적은 비교와 더 적은 메모리 공간을 차지하기 때문에 더 좋은 알고리즘으로 평가 받는다.
+
+## 장단점
+|장점|단점|
+|--|--|
+|재귀적인 기법으로 이해하기가 조금 어렵다.|성능이 `θ(nlogn)` 이전의 정렬보다 좋다.|
