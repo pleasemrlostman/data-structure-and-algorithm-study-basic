@@ -19,3 +19,8 @@
 ## 알고리즘
 
 ### [재귀](https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/tree/main/algorithm/recursion)
+### [버블정렬](https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/tree/main/algorithm/sort/bubble)
+### [삽입정렬](https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/tree/main/algorithm/sort/insertion)
+### [선택정렬](https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/tree/main/algorithm/sort/selection)
+### [병합정렬](https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/tree/main/algorithm/sort/merge)
+### [퀵정렬](https://github.com/pleasemrlostman/data-structure-and-algorithm-study-basic/tree/main/algorithm/sort/quick)
